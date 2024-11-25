@@ -38,3 +38,19 @@ const fetchRealTimeStockPrice = async (symbol) => {
 module.exports = {
     fetchRealTimeStockPrice,
 };
+
+const fetchHistoricalPrices = async (symbol) => {
+    try {
+        const response = await axios.get(`https://financialmodelingprep.com/api/v3/historical-price-full/${symbol}`, {
+            params: { apikey: API_KEY },
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching historical prices:', error.message);
+        throw error;
+    }
+};
+
+module.exports = {
+    fetchHistoricalPrices, // Add this to the exports
+};

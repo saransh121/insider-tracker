@@ -31,4 +31,25 @@ router.get('/quote', async (req, res) => {
     }
 });
 
+
+const { fetchHistoricalPrices } = require('../services/fmpService');
+
+router.get('/historical', async (req, res) => {
+    const { symbol } = req.query;
+    if (!symbol) {
+        return res.status(400).json({ error: 'Symbol is required' });
+    }
+
+    try {
+        const data = await fetchHistoricalPrices(symbol);
+        if (!data || !data.historical) {
+            return res.status(404).json({ error: 'No historical data found for this symbol' });
+        }
+        res.json(data.historical); // Return only the historical data array
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch historical data' });
+    }
+});
+
+
 module.exports = router;
